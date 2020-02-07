@@ -717,7 +717,7 @@ data = [
     ]
   },
   {
-    "name": "Congo (Democratic Republic of the)",
+    "name": "Democratic Republic of the Congo",
     "alpha2": "CD",
     "alpha3": "COD",
     "countrycode": "180",
@@ -1456,7 +1456,7 @@ data = [
     ]
   },
   {
-    "name": "Iran (Islamic Republic of)",
+    "name": "Iran",
     "alpha2": "IR",
     "alpha3": "IRN",
     "countrycode": "364",
@@ -2062,7 +2062,7 @@ data = [
     ]
   },
   {
-    "name": "Moldova (Republic of)",
+    "name": "Republic of Moldova",
     "alpha2": "MD",
     "alpha3": "MDA",
     "countrycode": "498",
@@ -2659,7 +2659,7 @@ data = [
     ]
   },
   {
-    "name": "Saint Martin (French part)",
+    "name": "Saint Martin",
     "alpha2": "MF",
     "alpha3": "MAF",
     "countrycode": "663",
@@ -2827,7 +2827,7 @@ data = [
     ]
   },
   {
-    "name": "Sint Maarten (Dutch part)",
+    "name": "Sint Maarten (Dutch)",
     "alpha2": "SX",
     "alpha3": "SXM",
     "countrycode": "534",

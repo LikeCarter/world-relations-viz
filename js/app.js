@@ -1,5 +1,4 @@
 // Constants
-
 var Yoffset = 60;
 var Xoffset = 60;
 var graphScaling = 20;
@@ -11,9 +10,10 @@ const yellow = "#FFC105";
 const blue = "#64B5F6";
 const green = "#8BC34A";
 
-// Filter the data
+// Filter the data to ensure that all countries have valid coordinates
 data = data.filter(value => value.coordinates);
 
+// Create the canvas
 var svgContainer = d3
     .select("#plot")
     .append("svg")
@@ -21,53 +21,7 @@ var svgContainer = d3
     .attr("height", 1024)
     .style("background", backgroundColour);
 
-var getColour = region => {
-    if (region == "Europe") {
-        return blue;
-    } else if (region == "Africa") {
-        return red;
-    } else if (region == "Americas") {
-        return grey;
-    } else if (region == "Asia") {
-        return yellow;
-    } else if (region == "Oceania") {
-        return green;
-    } else {
-        return grey;
-    }
-};
-
-function getCircleSize(arr) {
-    return arr.reduce((a, b) => a + b, 0);
-}
-
-function getPaths(data) {
-    let paths = [];
-    for (var i = 0; i < data.length - 1; i++) {
-        for (j = i + 1; j < data.length; j++) {
-            for (k = 0; k < data[i].arr.length; k++) {
-                if (data[i].arr[k] == 1 && data[j].arr[k] == 1) {
-                    let a = data[i];
-                    let b = data[j];
-                    paths.push({
-                        from: a.alpha3,
-                        fromReg: a.region,
-                        to: b.alpha3,
-                        toReg: b.region,
-                        x1: a.coordinates[0],
-                        y1: a.coordinates[1],
-                        x2: b.coordinates[0],
-                        y2: b.coordinates[1]
-                    });
-                    break; // Break because we found a match
-                }
-            }
-        }
-    }
-    return paths;
-}
-
-// Get unique entries
+// Get the unique organizations from the relationships found in the factbook
 var map = new Map();
 
 org.map(organization => {
@@ -81,8 +35,7 @@ org.map(organization => {
 var keys = Array.from(map.keys());
 var values = Array.from(map.values());
 
-// Assign each organization an ID from 0 -> 205
-
+// Each country is assigned an array to represent their relationships in each organization
 data.map(x => (x.arr = Array(205).fill(0)));
 
 org.map(organization => {
@@ -113,25 +66,34 @@ org.map(organization => {
     });
 });
 
-var links = [];
+// Helper function that retrieves the links between countries
+function getPaths(data) {
+    let paths = [];
+    for (var i = 0; i < data.length - 1; i++) {
+        for (j = i + 1; j < data.length; j++) {
+            for (k = 0; k < data[i].arr.length; k++) {
+                if (data[i].arr[k] == 1 && data[j].arr[k] == 1) {
+                    let a = data[i];
+                    let b = data[j];
+                    paths.push({
+                        from: a.alpha3,
+                        fromReg: a.region,
+                        to: b.alpha3,
+                        toReg: b.region,
+                        x1: a.coordinates[0],
+                        y1: a.coordinates[1],
+                        x2: b.coordinates[0],
+                        y2: b.coordinates[1]
+                    });
+                    break; // Break because we found a match
+                }
+            }
+        }
+    }
+    return paths;
+}
 
-var raw = data.map(value => value.arr);
-raw = raw.splice(0, 205);
-// Can't go past 205 – no more entries than dimensions?
-
-d3.select("#legend")
-    .selectAll("div")
-    .data(map)
-    .enter()
-    .append("div")
-    .attr("class", "org")
-    .attr("id", function(d) {
-        return d;
-    })
-    .text(function(d) {
-        return d;
-    });
-
+// Plot the links between countries
 function plotLines(data, scale, Xoffset, Yoffset) {
     var paths = getPaths(data);
     var lines = svgContainer
@@ -169,6 +131,7 @@ function plotLines(data, scale, Xoffset, Yoffset) {
         .style("visibility", "hidden");
 }
 
+// Plot the circles and labels that represent each country
 function plotCircles(data) {
     var circles = svgContainer
         .selectAll("circle")
@@ -223,6 +186,7 @@ function plotCircles(data) {
                 .style("visibility", "hidden");
         });
 
+    // Add the labels
     svgContainer
         .selectAll("text")
         .data(data)
@@ -245,12 +209,13 @@ function plotCircles(data) {
         });
 }
 
+// Plot the lines and circles
 plotLines(data, graphScaling, Xoffset, Yoffset);
 plotCircles(data);
 
-/**
- *
- */
+// Get a raw array of the data
+var raw = data.map(value => value.arr);
+raw = raw.splice(0, 205); // Can't go past 205 – no more entries than dimensions?
 
 var opt = {};
 opt.epsilon = 10; // epsilon is learning rate (10 = default)
@@ -259,7 +224,7 @@ opt.dim = 2; // dimensionality of the embedding (2 = default)
 
 var tsne = new tsnejs.tSNE(opt); // create a tSNE instance
 
-// initialize data. Here we have 3 points and some example pairwise dissimilarities
+// Initialize data. Here we have 3 points and some example pairwise dissimilarities
 var dists = raw;
 
 function onRun() {
@@ -275,6 +240,7 @@ function onRun() {
 var offset = 400;
 var scale = 300;
 
+// Update the position of the circles, labels, and lines after the TSNE algorithm runs
 function updateEmbedding() {
     var Y = tsne.getSolution(); // Y is an array of 2-D points that you can plot
 
@@ -293,7 +259,7 @@ function updateEmbedding() {
                 return Y[index][1] * scale + offset;
             });
 
-        // Update the position of the titles
+        // Update the position of the labels
         svgContainer
             .select("#" + value.alpha3)
             .transition()
