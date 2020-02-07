@@ -4,5 +4,9 @@ Map of the relationships between countries of the world. Relationships among 192
 
 Developed with vanilla Javascript and D3.js.
 
-![Country map sample image](https://github.com/LikeCarter/world-relations-viz/raw/master/demo/countries.jpg "Country map")
+![Country map sample image](https://github.com/LikeCarter/world-relations-viz/raw/master/demo/countries.jpg "Country map"){: width=300 padding:16px"}
+
+
+![Clustered country map sample image](https://github.com/LikeCarter/world-relations-viz/raw/master/demo/tsne.jpg "Clustered country map"){: width=300 padding:16px"}
+
 
