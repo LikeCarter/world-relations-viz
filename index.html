@@ -1,0 +1,131 @@
+<html>
+    <head>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="./js/lib/tsne.js"></script>
+        <script src="./data/tile-grid-map-full.js"></script>
+        <script src="./data/org.js"></script>
+    </head>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+                "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+                "Helvetica Neue", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        #content {
+            padding-left: 15px;
+            padding-right: 15px;
+
+        }
+
+        .legend-item {
+            display: flex;
+            flex-direction: row;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+            align-content: center;
+            flex-wrap: wrap;
+        }
+
+        .legend-item-text {
+            margin: 0px 0.5em 0px 0px;
+            padding: 0.5em;
+        }
+
+        code {
+            font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+                monospace;
+        }
+
+        circle {
+            cursor: default;
+            stroke: #ffffff;
+        }
+        text {
+            cursor: default;
+        }
+    </style>
+    <body>
+        <div id="content">
+        <div id="legend"></div>
+        <div id="plot"></div>
+
+        <div style="flex: auto; flex-direction: column; ">
+            <div
+                style="display: flex;
+            flex-direction: row;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+            align-content: center;
+            flex-wrap: wrap;"
+            >
+                <div class="legend-item" style="align-items: baseline;">
+                    <svg width="10" height="10">
+                        <circle cx="5" cy="5" r="4" fill="#F44336"></circle>
+                    </svg>
+                    <div class="legend-item-text"><small>Africa</small></div>
+                </div>
+                <div class="legend-item" style="align-items: baseline;">
+                    <svg width="10" height="10">
+                        <circle cx="5" cy="5" r="4" fill="#84979F"></circle>
+                    </svg>
+                    <div class="legend-item-text"><small>Americas</small></div>
+                </div>
+                <div class="legend-item" style="align-items: baseline;">
+                    <svg width="10" height="10">
+                        <circle cx="5" cy="5" r="4" fill="#FFC105"></circle>
+                    </svg>
+                    <div class="legend-item-text"><small>Asia</small></div>
+                </div>
+                <div class="legend-item" style="align-items: baseline;">
+                    <svg width="10" height="10">
+                        <circle cx="5" cy="5" r="4" fill="#64B5F6"></circle>
+                    </svg>
+                    <div class="legend-item-text"><small>Europe</small></div>
+                </div>
+                <div class="legend-item" style="align-items: baseline;">
+                    <svg width="10" height="10">
+                        <circle cx="5" cy="5" r="4" fill="#8BC34A"></circle>
+                    </svg>
+                    <div class="legend-item-text"><small>Oceania</small></div>
+                </div>
+            </div>
+            <div
+                style="justify-content: flex-end; display: flex;
+            flex-direction: row;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+            align-content: center;
+            flex-wrap: wrap;"
+            >
+                <div class="legend-item" style="align-items: baseline;">
+                    <svg width="10" height="10">
+                        <circle cx="5" cy="5" r="4" fill="#ECEFF1"></circle>
+                    </svg>
+                    <div class="legend-item-text"><small>member</small></divclass="legend-item-text">
+                </div>
+                <div class="legend-item" style="align-items: baseline;">
+                    <svg width="10" height="10">
+                        <circle
+                            cx="5"
+                            cy="5"
+                            r="4"
+                            fill="none"
+                            stroke="#FFFFFF"
+                            stroke-width="2"
+                        ></circle>
+                    </svg>
+                    <div class="legend-item-text">
+                        <small>observer, associate member and others</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </body>
+    <script src="./js/app.js"></script>
+</html>
