@@ -15,10 +15,14 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
+        code {
+            font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+                monospace;
+        }
+
         #content {
             padding-left: 15px;
             padding-right: 15px;
-
         }
 
         .legend-item {
@@ -35,97 +39,106 @@
             padding: 0.5em;
         }
 
-        code {
-            font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-                monospace;
-        }
-
         circle {
             cursor: default;
             stroke: #ffffff;
         }
+
         text {
             cursor: default;
         }
     </style>
     <body>
-        <div id="content">
-        <div id="legend"></div>
-        <div id="plot"></div>
+        <div
+            id="content"
+            style="display: block; max-width: 640px; margin: 0 auto"
+        >
+            <div id="plot" style="width: 100%; height: 500px"></div>
 
-        <div style="flex: auto; flex-direction: column; ">
-            <div
-                style="display: flex;
+            <div style="flex: auto; flex-direction: column; ">
+                <div
+                    style="display: flex;
             flex-direction: row;
             -webkit-box-pack: justify;
-            justify-content: space-between;
+            justify-content: space-around;
             align-content: center;
             flex-wrap: wrap;"
-            >
-                <div class="legend-item" style="align-items: baseline;">
-                    <svg width="10" height="10">
-                        <circle cx="5" cy="5" r="4" fill="#F44336"></circle>
-                    </svg>
-                    <div class="legend-item-text"><small>Africa</small></div>
-                </div>
-                <div class="legend-item" style="align-items: baseline;">
-                    <svg width="10" height="10">
-                        <circle cx="5" cy="5" r="4" fill="#84979F"></circle>
-                    </svg>
-                    <div class="legend-item-text"><small>Americas</small></div>
-                </div>
-                <div class="legend-item" style="align-items: baseline;">
-                    <svg width="10" height="10">
-                        <circle cx="5" cy="5" r="4" fill="#FFC105"></circle>
-                    </svg>
-                    <div class="legend-item-text"><small>Asia</small></div>
-                </div>
-                <div class="legend-item" style="align-items: baseline;">
-                    <svg width="10" height="10">
-                        <circle cx="5" cy="5" r="4" fill="#64B5F6"></circle>
-                    </svg>
-                    <div class="legend-item-text"><small>Europe</small></div>
-                </div>
-                <div class="legend-item" style="align-items: baseline;">
-                    <svg width="10" height="10">
-                        <circle cx="5" cy="5" r="4" fill="#8BC34A"></circle>
-                    </svg>
-                    <div class="legend-item-text"><small>Oceania</small></div>
+                >
+                    <div class="legend-item" style="align-items: baseline;">
+                        <svg width="10" height="10">
+                            <circle cx="5" cy="5" r="4" fill="#F44336"></circle>
+                        </svg>
+                        <div class="legend-item-text">
+                            <small>Africa</small>
+                        </div>
+                    </div>
+                    <div class="legend-item" style="align-items: baseline;">
+                        <svg width="10" height="10">
+                            <circle cx="5" cy="5" r="4" fill="#84979F"></circle>
+                        </svg>
+                        <div class="legend-item-text">
+                            <small>Americas</small>
+                        </div>
+                    </div>
+                    <div class="legend-item" style="align-items: baseline;">
+                        <svg width="10" height="10">
+                            <circle cx="5" cy="5" r="4" fill="#FFC105"></circle>
+                        </svg>
+                        <div class="legend-item-text"><small>Asia</small></div>
+                    </div>
+                    <div class="legend-item" style="align-items: baseline;">
+                        <svg width="10" height="10">
+                            <circle cx="5" cy="5" r="4" fill="#64B5F6"></circle>
+                        </svg>
+                        <div class="legend-item-text">
+                            <small>Europe</small>
+                        </div>
+                    </div>
+                    <div class="legend-item" style="align-items: baseline;">
+                        <svg width="10" height="10">
+                            <circle cx="5" cy="5" r="4" fill="#8BC34A"></circle>
+                        </svg>
+                        <div class="legend-item-text">
+                            <small>Oceania</small>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div
-                style="justify-content: flex-end; display: flex;
+            <div style="flex: auto; flex-direction: column; ">
+                <div
+                    style="display: flex;
             flex-direction: row;
             -webkit-box-pack: justify;
-            justify-content: space-between;
+            justify-content: space-around;
             align-content: center;
             flex-wrap: wrap;"
-            >
-                <div class="legend-item" style="align-items: baseline;">
-                    <svg width="10" height="10">
-                        <circle cx="5" cy="5" r="4" fill="#ECEFF1"></circle>
-                    </svg>
-                    <div class="legend-item-text"><small>member</small></divclass="legend-item-text">
-                </div>
-                <div class="legend-item" style="align-items: baseline;">
-                    <svg width="10" height="10">
-                        <circle
-                            cx="5"
-                            cy="5"
-                            r="4"
-                            fill="none"
-                            stroke="#FFFFFF"
-                            stroke-width="2"
-                        ></circle>
-                    </svg>
-                    <div class="legend-item-text">
-                        <small>observer, associate member and others</small>
+                >
+                    <div class="legend-item" style="align-items: baseline;">
+                        <svg width="10" height="10">
+                            <circle cx="5" cy="5" r="4" fill="#ECEFF1"></circle>
+                        </svg>
+                        <div class="legend-item-text">
+                            <small>member</small>
+                        </div>
+                    </div>
+                    <div class="legend-item" style="align-items: baseline;">
+                        <svg width="10" height="10">
+                            <circle
+                                style="                            stroke: #ECEFF1;
+                        stroke-width: 2"
+                                cx="5"
+                                cy="5"
+                                r="4"
+                                fill="none"
+                            ></circle>
+                        </svg>
+                        <div class="legend-item-text">
+                            <small>observer, associate member and others</small>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
-    </div>
     </body>
     <script src="./js/utility.js"></script>
     <script src="./js/app.js"></script>

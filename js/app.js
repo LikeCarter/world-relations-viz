@@ -1,6 +1,8 @@
 // Constants
-var Yoffset = 60;
-var Xoffset = 60;
+var Yoffset = 15;
+var Xoffset = 0;
+var textXOffset = 15;
+var textYOffset = -5;
 var graphScaling = 20;
 var backgroundColour = "1111ff";
 
@@ -14,11 +16,12 @@ const green = "#8BC34A";
 data = data.filter(value => value.coordinates);
 
 // Create the canvas
+
 var svgContainer = d3
     .select("#plot")
     .append("svg")
-    .attr("width", 1024)
-    .attr("height", 1024)
+    .attr("width", "100%")
+    .attr("height", "500px")
     .style("background", backgroundColour);
 
 // Get the unique organizations from the relationships found in the factbook
@@ -93,6 +96,53 @@ function getPaths(data) {
     return paths;
 }
 
+// Get the members of an organization
+function getOrganizationMembers(organizationCode) {
+    var countryList = [];
+    org.map(function(x) {
+        if (x.organizationCode == organizationCode) {
+            countryList.push({
+                countryCode: x.countryCode,
+                membershipType: x.membershipType,
+                membershipCategory: x.membershipCategory
+            });
+        }
+    });
+    return countryList;
+}
+
+function highlightOrganization(organizationCode) {
+    var members = getOrganizationMembers(organizationCode);
+
+    d3.selectAll("circle").each(function(e, i) {
+        if (e) {
+            var contains = false;
+            var member = false;
+            members.map(function(x) {
+                if (x.countryCode == e.alpha3) {
+                    contains = true;
+                    if(x.membershipType == "member") {
+                        member = true;
+                    }
+                }
+            });
+
+            if (!contains) {
+                d3.select(this).style("opacity", "0.1");
+            } else {
+                d3.select(this).style("opacity", "1.0");
+                if (!member) {
+                    d3.select(this).style("stroke-width", "2").style("stroke", getColour(e.region)).style("fill", "#ffffff")
+                }
+            }
+        }
+    });
+}
+
+function resetHighlights() {
+    d3.selectAll("circle").style("opacity", "1.0");
+}
+
 // Plot the links between countries
 function plotLines(data, scale, Xoffset, Yoffset) {
     var paths = getPaths(data);
@@ -158,7 +208,7 @@ function plotCircles(data) {
             d3.select("#" + d.alpha3)
                 .style("opacity", "1")
                 .style("visibility", "visible");
-            d3.select("#circle-" + d.alpha3).style("stroke", "#000000");
+            // d3.select("#circle-" + d.alpha3).style("stroke", "#000000");
             d3.selectAll(".line-" + d.alpha3 + "-region-" + d.region).each(
                 function(e, i) {
                     var colour = "#fff";
@@ -179,7 +229,7 @@ function plotCircles(data) {
             d3.select("#" + d.alpha3)
                 .style("opacity", "0")
                 .style("visibility", "hidden");
-            d3.select("#circle-" + d.alpha3).style("stroke", "#ffffff");
+            // d3.select("#circle-" + d.alpha3).style("stroke", "#ffffff");
             let lines = d3
                 .selectAll(".line-" + d.alpha3 + "-region-" + d.region)
                 .style("opacity", "0")
@@ -196,14 +246,15 @@ function plotCircles(data) {
             return d.alpha3;
         })
         .attr("x", function(d) {
-            return d.coordinates[0] * graphScaling + Xoffset - 30;
+            return d.coordinates[0] * graphScaling + Xoffset + textXOffset;
         })
         .attr("y", function(d) {
-            return d.coordinates[1] * graphScaling + Yoffset - 30;
+            return d.coordinates[1] * graphScaling + Yoffset + textYOffset;
         })
         .style("opacity", "0")
         .style("visibility", "hidden")
         .style("z-index", "10")
+        .style("background", "#000000")
         .text(function(d) {
             return d.name;
         });
@@ -230,33 +281,30 @@ var dists = raw;
 function onRun() {
     tsne.initDataDist(dists);
 
-    for (var k = 0; k < 500; k++) {
+    for (var k = 0; k < 250; k++) {
         tsne.step(); // every time you call this, solution gets better
     }
 
-    updateEmbedding();
+    updateEmbedding(200, 350, 200);
 }
 
-var offset = 400;
-var scale = 300;
-
 // Update the position of the circles, labels, and lines after the TSNE algorithm runs
-function updateEmbedding() {
+function updateEmbedding(scale, Xoffset, Yoffset) {
     var Y = tsne.getSolution(); // Y is an array of 2-D points that you can plot
 
     data.map(function(value, index) {
-        value.coordinates[0] = Y[index][0] * scale + offset;
-        value.coordinates[1] = Y[index][1] * scale + offset;
+        value.coordinates[0] = Y[index][0] * scale + Xoffset;
+        value.coordinates[1] = Y[index][1] * scale + Yoffset;
 
         // Update the position of the circles
         svgContainer
             .select("#circle-" + value.alpha3)
             .transition()
             .attr("cx", function(d) {
-                return Y[index][0] * scale + offset;
+                return Y[index][0] * scale + Xoffset;
             })
             .attr("cy", function(d) {
-                return Y[index][1] * scale + offset;
+                return Y[index][1] * scale + Yoffset;
             });
 
         // Update the position of the labels
@@ -264,10 +312,10 @@ function updateEmbedding() {
             .select("#" + value.alpha3)
             .transition()
             .attr("x", function(d) {
-                return Y[index][0] * scale + offset - 30;
+                return Y[index][0] * scale + Xoffset + textXOffset;
             })
             .attr("y", function(d) {
-                return Y[index][1] * scale + offset - 30;
+                return Y[index][1] * scale + Yoffset + textYOffset;
             });
 
         // Update the position of the connections
@@ -275,12 +323,14 @@ function updateEmbedding() {
             .selectAll(".line-" + value.alpha3 + "-region-" + value.region)
             .each(function(e, i) {
                 if (e.from == value.alpha3) {
-                    d3.select(this).attr("x1", Y[index][0] * scale + offset);
-                    d3.select(this).attr("y1", Y[index][1] * scale + offset);
+                    d3.select(this).attr("x1", Y[index][0] * scale + Xoffset);
+                    d3.select(this).attr("y1", Y[index][1] * scale + Yoffset);
                 } else if (e.to == value.alpha3) {
-                    d3.select(this).attr("x2", Y[index][0] * scale + offset);
-                    d3.select(this).attr("y2", Y[index][1] * scale + offset);
+                    d3.select(this).attr("x2", Y[index][0] * scale + Xoffset);
+                    d3.select(this).attr("y2", Y[index][1] * scale + Yoffset);
                 }
             });
     });
 }
+
+function filterByOrg() {}
